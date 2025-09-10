@@ -3,8 +3,8 @@ import ssl
 from random import randint
 from email.message import EmailMessage
 
-emailEmisor = "notificacionesclinica12@gmail.com"
-clave = "uamc ianh bugx ywav"
+emailEmisor = "CORREO"
+clave = "CLAVE_ACCESO"
 
 # ------------------ ENVIAR CODIGO ------------------
 
