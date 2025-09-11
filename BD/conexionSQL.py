@@ -11,7 +11,7 @@ class DAO:
                 host="localhost",
                 user="USUARIO",
                 password="CONTRASEÑA",
-                database="BD",
+                database="clinica",
             )
         except Error as ex:
             print("Error conectar base de datos", ex)
