@@ -1,0 +1,1 @@
+from TKINTER.main import *; app()
