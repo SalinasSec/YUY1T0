@@ -38,7 +38,6 @@ def validarGmail(correo):
 
 # ------------------ LOGIN ------------------
 
-
 def inicio():
     ttk.Button(
         framePrincipal,
@@ -54,7 +53,7 @@ def inicio():
         width=20,
         command=lambda: cambiarPantalla(registrarI),
     ).pack(pady=50)
-
+    
 
 def registrarI():
     global codeGlobal, entryNombre, entryEmail, entryPass
@@ -88,15 +87,15 @@ def registrarI():
         text="Registrar",
         style="BotonGrande.TButton",
         width=20,
-        command=funcRegister,
+        command=funcRegister
     ).pack(pady=30)
 
     ttk.Button(
         framePrincipal,
-        text="Volver",
+        text='Volver',
         style="BotonGrande.TButton",
         width=20,
-        command=volver,
+        command=volver
     ).pack(pady=30)
 
 
@@ -108,13 +107,11 @@ def funcRegister():
     if nombre == "" or password == "" or email == "":
         messagebox.showerror("Error:", "Campos nulos")
         return
-    if email == "admin@clinica.com":
-        messagebox.showwarning("Aviso:", "Email ya utilizado")
+    if email == 'admin@clinica.com':
+        messagebox.showwarning('Aviso:','Email ya utilizado')
         return
     if not validarGmail(email):
-        messagebox.showerror(
-            "Error:", "Ingreso de correo erroneo (ejemplo123@gmail.com)"
-        )
+        messagebox.showerror("Error:", "Ingreso de correo erroneo (ejemplo123@gmail.com)")
         return
     if existeUsuario(email):
         messagebox.showwarning("Error", "El correo ya está registrado")
@@ -156,17 +153,16 @@ def iniciarSesion():
         text="Iniciar Sesión",
         style="BotonGrande.TButton",
         width=20,
-        command=funcLogin,
+        command=funcLogin
     ).pack(pady=30)
 
     ttk.Button(
         framePrincipal,
-        text="Volver",
+        text='Volver',
         style="BotonGrande.TButton",
         width=20,
-        command=volver,
+        command=volver
     ).pack(pady=30)
-
 
 def funcLogin():
     email = entryEmail.get()
@@ -192,7 +188,6 @@ def salir():
         sleep(0.09)
     sleep(2)
     lPantallaT()
-
 
 def volver():
     cambiarPantalla(inicio)
@@ -400,14 +395,14 @@ def app():
     )
 
     frameTitulo = Frame(raiz, bg="#d6eaf8")
-    frameTitulo.pack(side="top")
+    frameTitulo.pack(side='top')
 
     Label(
         frameTitulo,
-        text="Sistema de Turnos - Clínica",
-        font=("Arial", 40, "bold"),
-        bg="#d6eaf8",
-    ).pack()
+        text='Sistema de Turnos - Clínica',
+        font=('Arial', 90, 'bold'),
+        bg="#d6eaf8"
+        ).pack()
 
     cambiarPantalla(inicio)
 

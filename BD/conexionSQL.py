@@ -10,7 +10,7 @@ class DAO:
             return connect(
                 host="localhost",
                 user="root",
-                password="abcd1234",
+                password="root",
                 database="clinica",
             )
         except Error as ex:
