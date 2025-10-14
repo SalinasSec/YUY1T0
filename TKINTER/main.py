@@ -54,7 +54,6 @@ def inicio():
         command=lambda: cambiarPantalla(registrarI),
     ).pack(pady=50)
     
-
 def registrarI():
     global codeGlobal, entryNombre, entryEmail, entryPass
 
@@ -82,20 +81,32 @@ def registrarI():
     entryPass = Entry(framePrincipal, show="*", font=("Arial", 18), width=30)
     entryPass.pack(pady=10)
 
+    imagenRegistrar = PhotoImage(file='img/register.png')
+    imgReg = Label(framePrincipal, image=imagenRegistrar)
+    imgReg.image = imagenRegistrar
+    
     ttk.Button(
         framePrincipal,
-        text="Registrar",
+        text=" Registrar",
         style="BotonGrande.TButton",
-        width=20,
-        command=funcRegister
+        width=10,
+        command=funcRegister,
+        image=imagenRegistrar,
+        compound='left',
     ).pack(pady=30)
+
+    imagenVolver = PhotoImage(file='img/volver.png')
+    imgVol = Label(framePrincipal, image=imagenVolver)
+    imgVol.image = imagenVolver
 
     ttk.Button(
         framePrincipal,
-        text='Volver',
+        text=' Volver',
         style="BotonGrande.TButton",
-        width=20,
-        command=volver
+        width=10,
+        command=volver,
+        image=imagenVolver,
+        compound='left',
     ).pack(pady=30)
 
 
@@ -105,16 +116,16 @@ def funcRegister():
     password = entryPass.get()
 
     if nombre == "" or password == "" or email == "":
-        messagebox.showerror("Error:", "Campos nulos")
+        messagebox.showerror("ERROR:", "Campos nulos")
         return
     if email == 'admin@clinica.com':
         messagebox.showwarning('Aviso:','Email ya utilizado')
         return
     if not validarGmail(email):
-        messagebox.showerror("Error:", "Ingreso de correo erroneo (ejemplo123@gmail.com)")
+        messagebox.showerror("ERROR:", "Ingreso de correo erroneo (ejemplo123@gmail.com)")
         return
     if existeUsuario(email):
-        messagebox.showwarning("Error", "El correo ya está registrado")
+        messagebox.showwarning("ERROR", "El correo ya está registrado")
         return
     codeGlobal = enviarCode(email)
     messagebox.showinfo("Verificación", "Código enviado a tu correo")
@@ -127,11 +138,11 @@ def funcRegister():
         messagebox.showinfo("Éxito", "Usuario registrado")
         registrar(nombre, email, password)
     else:
-        messagebox.showerror("Error", "Código Incorrecto")
+        messagebox.showerror("ERROR", "Código Incorrecto")
 
 
 def iniciarSesion():
-    global usuarioActual, entryNombre, entryEmail, entryPass
+    global entryNombre, entryEmail, entryPass
 
     Label(
         framePrincipal,
@@ -148,36 +159,61 @@ def iniciarSesion():
     entryPass = Entry(framePrincipal, show="*", font=("Arial", 18), width=30)
     entryPass.pack(pady=10)
 
+    imagenInicio = PhotoImage(file='img/inicio.png')
+    imgIn = Label(framePrincipal, image=imagenInicio)
+    imgIn.image = imagenInicio
     ttk.Button(
         framePrincipal,
-        text="Iniciar Sesión",
+        text=" Iniciar Sesión",
         style="BotonGrande.TButton",
-        width=20,
-        command=funcLogin
+        width=15,
+        command=funcLogin,
+        image= imagenInicio,
+        compound="left"
     ).pack(pady=30)
+
+    imagenVolver = PhotoImage(file='img/volver.png')
+    imgVol = Label(framePrincipal, image=imagenVolver)
+    imgVol.image = imagenVolver
 
     ttk.Button(
         framePrincipal,
-        text='Volver',
+        text=' Volver',
         style="BotonGrande.TButton",
-        width=20,
-        command=volver
+        width=10,
+        command=volver,
+        image=imagenVolver,
+        compound='left',
     ).pack(pady=30)
 
 def funcLogin():
+    global usuarioActual
     email = entryEmail.get()
     password = entryPass.get()
     user = login(email, password)
-    if user:
+    if password == "" or email == "":
+        messagebox.showerror("ERROR:", "Campos nulos")
+        return
+    elif email == 'admin@clinica.com':
+        if password == 'admin123':
+            usuarioActual = login(email, password)
+            messagebox.showinfo("Bienvenido", f"Hola {usuarioActual['nombre']} ({usuarioActual['rol']})")
+            cambiarPantalla(pantallaAdmin)
+        else:
+            messagebox.showerror("ERROR:", "Contraseña incorrecta para el administrador")
+        return
+    elif not validarGmail(email):
+        messagebox.showerror("ERROR:", "Ingreso de correo erróneo (ejemplo123@gmail.com)")
+        return
+    elif user:
         usuarioActual = user
         messagebox.showinfo("Bienvenido", f"Hola {user['nombre']} ({user['rol']})")
-        if user["rol"] == "usuario":
-            cambiarPantalla(pantallaUsuario)
-        else:
-            cambiarPantalla(pantallaAdmin)
+        cambiarPantalla(pantallaUsuario)
     else:
-        messagebox.showerror("Error", "Credenciales incorrectas")
+        messagebox.showerror("ERROR", "Credenciales incorrectas")
+    
     print("Usuario Actual:", usuarioActual)
+
 
 
 def salir():
@@ -226,28 +262,28 @@ def pantallaUsuario():
         style="BotonMediano.TButton",
         width=25,
         command=generarTurno,
-    ).pack(pady=10)
+    ).pack(pady=10, padx=20)
     ttk.Button(
-        framePrincipal,
+        frame,
         text="Cancelar Turno",
         style="BotonMediano.TButton",
         width=25,
         command=cancelar,
-    ).pack(pady=10)
+    ).pack(pady=10, padx=20)
     ttk.Button(
         frame,
         text="Consultar Turnos",
         style="BotonMediano.TButton",
         width=25,
         command=mostrarTurnos,
-    ).pack(pady=10)
+    ).pack(pady=10, padx=20)
     ttk.Button(
         frame,
         text="Cerrar Sesión",
         style="BotonMediano.TButton",
         width=25,
         command=lambda: cambiarPantalla(inicio),
-    ).pack(pady=20)
+    ).pack(pady=20, padx=20)
 
 
 # ------------------ PANEL ADMIN ------------------
@@ -271,15 +307,15 @@ def pantallaAdmin():
             if res == "ok":
                 messagebox.showinfo("OK", "Turno Aceptado")
             elif res == "ya_atendido":
-                messagebox.showwarning("Aviso", "Este turno ya fue atendido")
+                messagebox.showwarning("AVISO", "Este turno ya fue atendido")
             elif res == "rechazado":
-                messagebox.showwarning("Aviso", "Este turno fue rechazado")
+                messagebox.showwarning("AVISO", "Este turno fue rechazado")
             elif res == "cancelado":
                 messagebox.showwarning(
-                    "Aviso", "Este turno fue cancelado por el usuario"
+                    "AVISO", "Este turno fue cancelado por el usuario"
                 )
             elif res == "no_existe":
-                messagebox.showerror("Error", "No existe un turno con ese ID")
+                messagebox.showerror("ERROR", "No existe un turno con ese ID")
 
     def rechazar():
         tid = simpledialog.askstring("Turno", "ID del turno:")
@@ -288,15 +324,15 @@ def pantallaAdmin():
             if res == "ok":
                 messagebox.showinfo("OK", "Turno Rechazado")
             elif res == "ya_atendido":
-                messagebox.showwarning("Aviso", "Este turno ya fue atendido")
+                messagebox.showwarning("AVISO", "Este turno ya fue atendido")
             elif res == "rechazado":
-                messagebox.showwarning("Aviso", "Este turno fue rechazado")
+                messagebox.showwarning("AVISO", "Este turno fue rechazado")
             elif res == "cancelado":
                 messagebox.showwarning(
-                    "Aviso", "Este turno fue cancelado por el usuario"
+                    "AVISO", "Este turno fue cancelado por el usuario"
                 )
             elif res == "no_existe":
-                messagebox.showerror("Error", "No existe un turno con ese ID")
+                messagebox.showerror("ERROR", "No existe un turno con ese ID")
 
     def atender():
         tid = simpledialog.askstring("Turno", "ID del turno:")
@@ -305,31 +341,33 @@ def pantallaAdmin():
             if res == "ok":
                 messagebox.showinfo("OK", "Turno Atendido")
             elif res == "falta_aceptar":
-                messagebox.showwarning("Aviso", "Primero debes aceptar el turno")
+                messagebox.showwarning("AVISO", "Primero debes aceptar el turno")
             elif res == "ya_atendido":
-                messagebox.showwarning("Aviso", "Este turno ya fue atendido")
+                messagebox.showwarning("AVISO", "Este turno ya fue atendido")
             elif res == "rechazado":
-                messagebox.showwarning("Aviso", "Este turno fue rechazado")
+                messagebox.showwarning("AVISO", "Este turno fue rechazado")
             elif res == "cancelado":
                 messagebox.showwarning(
-                    "Aviso", "Este turno fue cancelado por el usuario"
+                    "AVISO", "Este turno fue cancelado por el usuario"
                 )
             elif res == "no_existe":
-                messagebox.showerror("Error", "No existe un turno con ese ID")
+                messagebox.showerror("ERROR", "No existe un turno con ese ID")
 
     def enviar_Aviso():
         tid = simpledialog.askstring("Turno", "ID del turno:")
-        if tid:
-            turno = obtenerCorreo(int(tid))
-        if turno:
-            if turno["estado"] != "aceptado":
-                messagebox.showwarning("Aviso", "Turno no a sido acepatado")
+        try:
+            if tid:
+                turno = obtenerCorreo(int(tid))
+            if turno:
+                if turno["estado"] != "aceptado":
+                    messagebox.showwarning("AVISO", "Turno no a sido aceptado")
+                else:
+                    enviarAviso(turno["email"], turno["nombre"])
+                    messagebox.showinfo("AVISO", "Correo Enviado al usuario")
             else:
-                enviarAviso(turno["email"], turno["nombre"])
-                messagebox.showinfo("Aviso", "Correo Enviado al usuario")
-        else:
-            messagebox.showerror("Error", "Turno no econtrado")
-
+                messagebox.showerror("ERROR", "Turno no econtrado")
+        except:
+            messagebox.showwarning('AVISO', 'Ingrese numero del turno')
     ttk.Button(
         frame,
         text="Consultar Turnos",
@@ -390,7 +428,12 @@ def app():
     framePrincipal = Frame(raiz, bg="#d6eaf8")
     framePrincipal.place(relx=0.5, rely=0.5, anchor="center")
 
-    ttk.Button(raiz, text="Salir", width=5, command=salir).pack(
+    imagenSalir = PhotoImage(file='img/close.png')
+    imgS = Label(framePrincipal, image=imagenSalir)
+    imgS.image = imagenSalir
+
+    ttk.Button(raiz, width=4, command=salir, image=imagenSalir,
+        compound='center').pack(
         side="top", anchor="sw", pady=15, padx=15
     )
 
@@ -399,7 +442,7 @@ def app():
 
     Label(
         frameTitulo,
-        text='Sistema de Turnos - Clínica',
+        text='Registro de Atención - Clínica',
         font=('Arial', 90, 'bold'),
         bg="#d6eaf8"
         ).pack()
